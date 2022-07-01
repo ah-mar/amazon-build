@@ -1,7 +1,7 @@
 import Product from "./Product";
 
 function ProductFeed({ products }) {
-  console.log(products);
+  
   return (
     <div className="grid grid-flow-row-dense md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:-mt-40 mx-auto">
       {products.slice(0, 4).map((product) => (
@@ -17,7 +17,7 @@ function ProductFeed({ products }) {
           <Product key={product.id} product={product} />
         ))}
       </div>
-      {products.slice(5, ).map((product) => (
+      {products.slice(5).map((product) => (
         <Product key={product.id} product={product} />
       ))}
     </div>

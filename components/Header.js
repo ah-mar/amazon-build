@@ -1,7 +1,21 @@
-import Image from "next/image"
-import {  SearchIcon, ShoppingCartIcon, MenuIcon } from "@heroicons/react/outline";
+import Image from "next/image";
+import {
+  SearchIcon,
+  ShoppingCartIcon,
+  MenuIcon,
+} from "@heroicons/react/outline";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { selectItems } from "../slices/basketSlice";
 
 function Header() {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const items = useSelector(selectItems);
+  console.log(items);
+  console.log(session);
+  //const {name = "", image ="", email=""} = session?.user
   return (
     <header>
       {/* Top Nav */}
@@ -14,6 +28,7 @@ function Header() {
             alt=""
             objectFit="contain"
             className="cursor-pointer"
+            onClick={() => router.push("/")}
           />
         </div>
         {/* Search */}
@@ -26,17 +41,22 @@ function Header() {
         </div>
         {/* right */}
         <div className="text-white flex items-center text-xs gap-6 mx-6 whitespace-nowrap">
-          <div className="link">
-            <p>Hello User</p>
+          <div onClick={!session ? signIn : signOut} className="link">
+            <p className="hover:underline">
+              {session ? `Hola ${session.user.name}` : "Sign in"}
+            </p>
             <p className="font-extrabold md:text-sm">Account & Lists</p>
           </div>
           <div className="link">
             <p>Returns</p>
             <p className="font-extrabold md:text-sm">& Orders</p>
           </div>
-          <div className="relative link flex items-center">
+          <div
+            className="relative link flex items-center"
+            onClick={() => router.push("/checkout")}
+          >
             <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 text-center rounded-full font-bold text-black">
-              0
+              {items.length}
             </span>
             <ShoppingCartIcon className="h-10" />
             <p className="hidden md:inline font-extrabold md:text-sm mt-2">
@@ -63,4 +83,4 @@ function Header() {
     </header>
   );
 }
-export default Header
+export default Header;
