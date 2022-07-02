@@ -1,16 +1,40 @@
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import CheckoutProduct from "../components/CheckoutProduct";
 import Header from "../components/Header";
 import { selectItems, selectTotal } from "../slices/basketSlice";
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 function Checkout() {
-    const session = useSession()
-    const items = useSelector(selectItems)
-    const total = useSelector(selectTotal)
-    console.log("total is", total)
-    console.log("session in checkout", session)
+  const session = useSession();
+  const items = useSelector(selectItems);
+  const total = useSelector(selectTotal);
+  console.log("total is", total);
+  console.log("session in checkout", session);
+
+async function createCheckoutSession(){
+  const stripe = await stripePromise
+
+  // Call the backend to create a checkout session
+  const checkoutSession = await axios.post('/api/create-checkout-session', {
+    items,
+    email: session?.data?.user?.email,
+  })
+
+  // Redirect the user to Stripe Checkout
+  const result = await stripe.redirectToCheckout({
+    sessionId: checkoutSession.data.id
+  })
+
+  if(result.error) {
+   console.error("stripe error", result.error.message)
+  }
+
+}
+
   return (
     <div className="bg-gray-100">
       <Header />
@@ -45,7 +69,8 @@ function Checkout() {
                 Subtotal {items.length} items:{" "}
                 <span className="font-bold">$ {total}</span>
               </h2>
-              <button disabled ={session?.status === "unauthenticated"}
+              <button role='link' onClick={createCheckoutSession}
+                disabled={session?.status === "unauthenticated"}
                 className={`button mt-2 ${
                   session?.status === "unauthenticated" &&
                   "from-gray-600 to-gray-400 border border-gray-200 text-gray-200 cursor-not-allowed"

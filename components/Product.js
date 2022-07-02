@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { addToBasket } from "../slices/basketSlice";
 
 function Product(props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {
     id,
     title,
@@ -21,10 +21,10 @@ function Product(props) {
   //const isPrime = Math.round(Math.random()) === 0 ? false : true;
   const isPrime = true;
 
-  function addItemToBasket(){
-      const product = props.product
-      
-      dispatch(addToBasket({...product, isPrime}))
+  function addItemToBasket() {
+    const product = props.product;
+
+    dispatch(addToBasket({ ...product, isPrime }));
   }
 
   return (
@@ -49,7 +49,9 @@ function Product(props) {
           <p className="text-xs text-gray-500">FREE Next-day Delivery</p>
         </div>
       )}
-      <button onClick={addItemToBasket} className="mt-auto button">Add to Basket</button>
+      <button onClick={addItemToBasket} className="mt-auto button">
+        Add to Basket
+      </button>
     </div>
   );
 }
