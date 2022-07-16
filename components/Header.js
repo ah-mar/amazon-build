@@ -8,6 +8,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { selectItems } from "../slices/basketSlice";
+import logo from "../public/logo.png"
 
 function Header() {
   const router = useRouter();
@@ -22,7 +23,7 @@ function Header() {
       <div className="flex items-center bg-amazon_blue p-1 py-2 flex-grow">
         <div className="mt-2 flex items-center flex-grow sm:flex-grow-0">
           <Image
-            src="https://links.papareact.com/f90"
+            src={logo}
             width={150}
             height={40}
             alt=""

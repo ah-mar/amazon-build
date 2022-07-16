@@ -30,6 +30,8 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const endpointSecret = process.env.STRIPE_SIGNING_SECRET;
 
+
+// Firebase write function
 const fulfillOrder = async (session) => {
   const docRef = db
     .collection("users")
@@ -62,6 +64,7 @@ export default async function handler(req, res) {
     let event;
 
     // Verify event posted came from stripe - https://stripe.com/docs/webhooks/signatures
+    // https://stripe.com/docs/identity/handle-verification-outcomes
     try {
       event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
     } catch (err) {
@@ -88,7 +91,7 @@ export const config = {
   },
 };
 
-//firebase-adminsdk-5gsvq@build-part.iam.gserviceaccount.com
+
 //var admin = require("firebase-admin");
 // var serviceAccount = require("path/to/serviceAccountKey.json");
 

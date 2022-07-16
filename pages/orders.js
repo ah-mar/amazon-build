@@ -57,7 +57,7 @@ export async function getServerSideProps(context) {
   const q = query(postsRef, orderBy("timestamp", "desc"));
   const stripeOrders = await getDocs(q);
 
-  //Stripe Orders
+  //Stripe Orders - https://stripe.com/docs/api/checkout/sessions/line_items
   const orders = await Promise.all(
     stripeOrders.docs.map(async (order) => ({
       id: order.id,
